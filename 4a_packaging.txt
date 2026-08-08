@@ -1,0 +1,14 @@
+Final Project - Emotion Detector package structure
+
+$ tree EmotionDetection
+EmotionDetection
+├── __init__.py
+└── emotion_detection.py
+
+__init__.py:
+
+from .emotion_detection import emotion_detector
+
+__all__ = ["emotion_detector"]
+
+EmotionDetection is packaged as a reusable Python module.

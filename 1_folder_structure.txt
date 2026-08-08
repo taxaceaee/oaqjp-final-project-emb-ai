@@ -1,0 +1,20 @@
+Final Project - Emotion Detector
+
+$ tree /home/project/final_project
+/home/project/final_project
+├── EmotionDetection
+│   ├── __init__.py
+│   └── emotion_detection.py
+├── server.py
+├── static
+│   ├── style.css
+│   └── screenshots
+├── templates
+│   └── index.html
+├── tests
+│   ├── __init__.py
+│   └── test_emotion_detection.py
+├── requirements.txt
+└── README.md
+
+15 files and folders are present in the final project.
