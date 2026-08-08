@@ -1,7 +1,7 @@
 def analyze_text(text: str):
     """Reject blank input before calling Watson NLP."""
     if not text or not text.strip():
-        return None, "Please enter a statement before analyzing it."
+        return None, "Invalid input! Try again."
 
     result = emotion_detector(text)
     if result["dominant_emotion"] is None:
@@ -26,7 +26,7 @@ def emotion_detector_api():
     """Return a clear message for blank input."""
     text_to_analyse = request.args.get("textToAnalyze")
     if text_to_analyse is None or not text_to_analyse.strip():
-        return "Invalid input! Please enter a statement to analyze."
+        return "Invalid input! Try again."
     result, error = analyze_text(text_to_analyse)
     if error:
         return error

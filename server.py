@@ -10,7 +10,7 @@ app = Flask(__name__)
 def analyze_text(text: str):
     """Return an emotion result or a user-facing error message."""
     if not text or not text.strip():
-        return None, "Please enter a statement before analyzing it."
+        return None, "Invalid input! Try again."
 
     result = emotion_detector(text)
     if result["dominant_emotion"] is None:
@@ -37,7 +37,7 @@ def emotion_detector_api():
     if text_to_analyse is None:
         text_to_analyse = request.args.get("text", "")
     if not text_to_analyse.strip():
-        return "Invalid input! Please enter a statement to analyze."
+        return "Invalid input! Try again."
 
     result, error = analyze_text(text_to_analyse)
     if error:

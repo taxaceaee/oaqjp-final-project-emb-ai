@@ -14,11 +14,11 @@
         <p class="intro">Enter a sentence and the application will score anger, disgust, fear, joy, and sadness.</p>
         <form action="{{ url_for('home') }}" method="get" class="emotion-form">
           <label for="text">Your statement</label>
-          <textarea id="text" name="text" rows="4" placeholder="I am excited to learn something new...">{{ text }}</textarea>
+          <textarea id="text" name="text" rows="4" placeholder="">{{ text }}</textarea>
           <button type="submit">Analyze emotion <span aria-hidden="true">→</span></button>
         </form>
         {% if error %}
-        <div class="error-message" role="alert"><strong>We need a little more context.</strong><span>{{ error }}</span></div>
+        <div class="error-message" role="alert"><strong>{{ error }}</strong></div>
         {% endif %}
         {% if result %}
         <section class="result-card" aria-live="polite">
