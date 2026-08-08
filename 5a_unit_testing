@@ -14,7 +14,7 @@ def watson_response(scores, status_code=200):
     return response
 
 
-class EmotionDetectionTests(unittest.TestCase):
+class TestEmotionDetector(unittest.TestCase):
     """Test all dominant emotions and error handling."""
 
     @patch("EmotionDetection.emotion_detection.requests.post")

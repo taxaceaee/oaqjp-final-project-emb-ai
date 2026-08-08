@@ -20,7 +20,7 @@ def watson_response(scores, status_code=200):
     return response
 
 
-class EmotionDetectionTests(unittest.TestCase):
+class TestEmotionDetector(unittest.TestCase):
     """Verify each expected dominant emotion and invalid-input behavior."""
 
     @patch("EmotionDetection.emotion_detection.requests.post")
