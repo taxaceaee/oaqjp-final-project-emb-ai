@@ -1,4 +1,6 @@
-# Emotion Detector
+# Final Project - Emotion Detector
+
+This is the Final Project - Emotion Detector application.
 
 Emotion Detector is a Flask web application that analyzes a sentence with the IBM Watson Natural Language Processing emotion model. It returns the five emotion scores—anger, disgust, fear, joy, and sadness—along with the dominant emotion.
 
