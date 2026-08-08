@@ -1,5 +1,6 @@
 """Unit tests for the Watson emotion detector client."""
 
+import json
 import unittest
 from unittest.mock import Mock, patch
 
@@ -10,6 +11,9 @@ def watson_response(scores, status_code=200):
     """Build a small mock matching the Watson response object."""
     response = Mock()
     response.status_code = status_code
+    response.text = json.dumps({
+        "emotionPredictions": [{"emotion": scores}],
+    })
     response.json.return_value = {
         "emotionPredictions": [{"emotion": scores}],
     }

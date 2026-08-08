@@ -1,3 +1,6 @@
+import json
+
+
 def emotion_detector(text_to_analyse: str) -> Dict[str, Any]:
     """Return an empty result when Watson rejects or cannot analyze input."""
     if not isinstance(text_to_analyse, str) or not text_to_analyse.strip():
@@ -20,7 +23,8 @@ def emotion_detector(text_to_analyse: str) -> Dict[str, Any]:
         return _empty_result()
 
     try:
-        scores = response.json()["emotionPredictions"][0]["emotion"]
+        formatted_response = json.loads(response.text)
+        scores = formatted_response["emotionPredictions"][0]["emotion"]
         result = {name: scores[name] for name in EMOTION_NAMES}
         result["dominant_emotion"] = max(
             EMOTION_NAMES, key=lambda emotion: result[emotion]

@@ -1,6 +1,6 @@
 """Flask deployment for the Emotion Detector application."""
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, render_template, request
 
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -18,7 +18,7 @@ def analyze_text(text: str):
     return result, None
 
 
-@app.get("/")
+@app.route("/")
 def home():
     """Render the web interface and optionally analyze its query string."""
     has_text_parameter = "text" in request.args
@@ -30,14 +30,28 @@ def home():
     return render_template("index.html", text=text, result=result, error=error)
 
 
-@app.get("/emotionDetector")
+@app.route("/emotionDetector")
 def emotion_detector_api():
-    """Return JSON emotion data for a sentence supplied as `text`."""
-    text = request.args.get("text", "")
-    result, error = analyze_text(text)
+    """Return the formatted emotion response expected by the lab client."""
+    text_to_analyse = request.args.get("textToAnalyze")
+    if text_to_analyse is None:
+        text_to_analyse = request.args.get("text", "")
+    if not text_to_analyse.strip():
+        return "Invalid input! Please enter a statement to analyze."
+
+    result, error = analyze_text(text_to_analyse)
     if error:
-        return jsonify({"error": error}), 400
-    return jsonify(result)
+        return error
+
+    return (
+        "For the given statement, the system response is "
+        f"'anger': {result['anger']}, "
+        f"'disgust': {result['disgust']}, "
+        f"'fear': {result['fear']}, "
+        f"'joy': {result['joy']}, "
+        f"'sadness': {result['sadness']}. "
+        f"The dominant emotion is {result['dominant_emotion']}."
+    )
 
 
 if __name__ == "__main__":

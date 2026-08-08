@@ -1,5 +1,6 @@
 """Watson NLP emotion detection client."""
 
+import json
 from typing import Any, Dict, Optional
 
 import requests
@@ -54,7 +55,11 @@ def emotion_detector(text_to_analyse: str) -> Dict[str, Any]:
         return _empty_result()
 
     try:
-        emotion_scores = response.json()["emotionPredictions"][0]["emotion"]
+        try:
+            formatted_response = json.loads(response.text)
+        except (AttributeError, TypeError, json.JSONDecodeError):
+            formatted_response = response.json()
+        emotion_scores = formatted_response["emotionPredictions"][0]["emotion"]
         result = {name: emotion_scores[name] for name in EMOTION_NAMES}
         result["dominant_emotion"] = max(
             EMOTION_NAMES, key=lambda emotion: result[emotion]
