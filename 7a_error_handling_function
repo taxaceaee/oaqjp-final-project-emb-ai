@@ -1,0 +1,30 @@
+def emotion_detector(text_to_analyse: str) -> Dict[str, Any]:
+    """Return an empty result when Watson rejects or cannot analyze input."""
+    if not isinstance(text_to_analyse, str) or not text_to_analyse.strip():
+        return _empty_result()
+
+    try:
+        response = requests.post(
+            WATSON_EMOTION_URL,
+            json={"raw_document": {"text": text_to_analyse}},
+            headers=MODEL_HEADER,
+            timeout=15,
+        )
+    except requests.RequestException:
+        return _empty_result()
+
+    # Watson returns HTTP 400 for invalid input; handle it explicitly.
+    if response.status_code == 400:
+        return _empty_result()
+    if response.status_code != 200:
+        return _empty_result()
+
+    try:
+        scores = response.json()["emotionPredictions"][0]["emotion"]
+        result = {name: scores[name] for name in EMOTION_NAMES}
+        result["dominant_emotion"] = max(
+            EMOTION_NAMES, key=lambda emotion: result[emotion]
+        )
+        return result
+    except (KeyError, IndexError, TypeError, ValueError):
+        return _empty_result()

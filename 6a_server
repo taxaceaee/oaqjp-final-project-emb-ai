@@ -1,0 +1,42 @@
+from flask import Flask, jsonify, render_template, request
+
+from EmotionDetection.emotion_detection import emotion_detector
+
+app = Flask(__name__)
+
+
+def analyze_text(text: str):
+    """Return an emotion result or a user-facing error message."""
+    if not text or not text.strip():
+        return None, "Please enter a statement before analyzing it."
+
+    result = emotion_detector(text)
+    if result["dominant_emotion"] is None:
+        return None, "The emotion service could not analyze that statement."
+    return result, None
+
+
+@app.get("/")
+def home():
+    """Render the web interface and optionally analyze query text."""
+    has_text_parameter = "text" in request.args
+    text = request.args.get("text", "")
+    result = None
+    error = None
+    if has_text_parameter:
+        result, error = analyze_text(text)
+    return render_template("index.html", text=text, result=result, error=error)
+
+
+@app.get("/emotionDetector")
+def emotion_detector_api():
+    """Return JSON emotion data for the supplied text."""
+    text = request.args.get("text", "")
+    result, error = analyze_text(text)
+    if error:
+        return jsonify({"error": error}), 400
+    return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Emotion Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Watson NLP · Emotion Detection</p>
+        <h1>What feeling is hiding in your words?</h1>
+        <p class="intro">Enter a sentence and the application will score anger, disgust, fear, joy, and sadness.</p>
+        <form action="{{ url_for('home') }}" method="get" class="emotion-form">
+          <label for="text">Your statement</label>
+          <textarea id="text" name="text" rows="4" placeholder="I am excited to learn something new...">{{ text }}</textarea>
+          <button type="submit">Analyze emotion <span aria-hidden="true">→</span></button>
+        </form>
+        {% if error %}
+        <div class="error-message" role="alert"><strong>We need a little more context.</strong><span>{{ error }}</span></div>
+        {% endif %}
+        {% if result %}
+        <section class="result-card" aria-live="polite">
+          <div class="result-heading"><div><p class="eyebrow">Analysis complete</p><h2>Emotion profile</h2></div><span class="dominant-badge">{{ result.dominant_emotion|capitalize }} leads</span></div>
+          <div class="scores">
+            {% for emotion in ['anger', 'disgust', 'fear', 'joy', 'sadness'] %}
+            <div class="score-row"><div><span>{{ emotion|capitalize }}</span><strong>{{ '%.1f'|format(result[emotion] * 100) }}%</strong></div><div class="bar"><span style="width: {{ result[emotion] * 100 }}%"></span></div></div>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+      </section>
+      <footer><span>Emotion Detector</span><span>Built with Flask &amp; Watson NLP</span></footer>
+    </main>
+  </body>
+</html>

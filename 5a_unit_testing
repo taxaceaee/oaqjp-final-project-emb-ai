@@ -1,0 +1,79 @@
+import unittest
+from unittest.mock import Mock, patch
+
+from EmotionDetection.emotion_detection import emotion_detector
+
+
+def watson_response(scores, status_code=200):
+    """Build a mock Watson response."""
+    response = Mock()
+    response.status_code = status_code
+    response.json.return_value = {
+        "emotionPredictions": [{"emotion": scores}],
+    }
+    return response
+
+
+class EmotionDetectionTests(unittest.TestCase):
+    """Test all dominant emotions and error handling."""
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_joy_dominates(self, post):
+        """Joy is selected when it has the highest score."""
+        post.return_value = watson_response(
+            {"anger": 0.01, "disgust": 0.01, "fear": 0.01,
+             "joy": 0.95, "sadness": 0.02}
+        )
+        self.assertEqual(emotion_detector("I am happy")["dominant_emotion"], "joy")
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_anger_dominates(self, post):
+        """Anger is selected when it has the highest score."""
+        post.return_value = watson_response(
+            {"anger": 0.92, "disgust": 0.01, "fear": 0.02,
+             "joy": 0.02, "sadness": 0.03}
+        )
+        self.assertEqual(emotion_detector("I am furious")["dominant_emotion"], "anger")
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_disgust_dominates(self, post):
+        """Disgust is selected when it has the highest score."""
+        post.return_value = watson_response(
+            {"anger": 0.01, "disgust": 0.94, "fear": 0.01,
+             "joy": 0.01, "sadness": 0.03}
+        )
+        self.assertEqual(
+            emotion_detector("That is disgusting")["dominant_emotion"], "disgust"
+        )
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_fear_dominates(self, post):
+        """Fear is selected when it has the highest score."""
+        post.return_value = watson_response(
+            {"anger": 0.01, "disgust": 0.01, "fear": 0.94,
+             "joy": 0.01, "sadness": 0.03}
+        )
+        self.assertEqual(
+            emotion_detector("I am terrified")["dominant_emotion"], "fear"
+        )
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_sadness_dominates(self, post):
+        """Sadness is selected when it has the highest score."""
+        post.return_value = watson_response(
+            {"anger": 0.01, "disgust": 0.01, "fear": 0.03,
+             "joy": 0.01, "sadness": 0.94}
+        )
+        self.assertEqual(
+            emotion_detector("I feel sad")["dominant_emotion"], "sadness"
+        )
+
+    def test_blank_input_returns_empty_result(self):
+        """Blank text returns a safe empty result."""
+        self.assertIsNone(emotion_detector("   ")["dominant_emotion"])
+
+    @patch("EmotionDetection.emotion_detection.requests.post")
+    def test_bad_request_returns_empty_result(self, post):
+        """HTTP 400 returns a safe empty result."""
+        post.return_value = watson_response({}, status_code=400)
+        self.assertIsNone(emotion_detector("invalid")["dominant_emotion"])
