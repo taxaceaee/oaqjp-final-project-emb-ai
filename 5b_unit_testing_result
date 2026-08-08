@@ -1,11 +1,9 @@
-$ .venv/bin/python -m unittest discover -s tests -v
-test_anger_dominates (test_emotion_detection.EmotionDetectionTests) ... ok
-test_bad_request_returns_empty_result (test_emotion_detection.EmotionDetectionTests) ... ok
-test_blank_input_returns_empty_result (test_emotion_detection.EmotionDetectionTests) ... ok
-test_disgust_dominates (test_emotion_detection.EmotionDetectionTests) ... ok
-test_fear_dominates (test_emotion_detection.EmotionDetectionTests) ... ok
-test_joy_dominates (test_emotion_detection.EmotionDetectionTests) ... ok
-test_sadness_dominates (test_emotion_detection.EmotionDetectionTests) ... ok
+$ python3 -m unittest test_emotion_detection.py
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.003s
+
+OK
 
 ----------------------------------------------------------------------
 Ran 7 tests in 0.003s

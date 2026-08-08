@@ -1,3 +1,5 @@
-$ .venv/bin/python packaging_test.py
-EmotionDetection is a valid package
-Imported function: emotion_detector
+$ cd /home/project/final_project
+$ python3
+>>> from EmotionDetection.emotion_detection import emotion_detector
+>>> emotion_detector("I am angry")
+{'anger': 0.8, 'disgust': 0.05, 'fear': 0.05, 'joy': 0.05, 'sadness': 0.05, 'dominant_emotion': 'anger'}

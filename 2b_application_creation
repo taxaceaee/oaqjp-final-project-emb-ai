@@ -1,4 +1,5 @@
-$ .venv/bin/python application_creation_test.py
-EmotionDetection imported successfully
-{'anger': 0.01, 'disgust': 0.01, 'fear': 0.01, 'joy': 0.95, 'sadness': 0.02, 'dominant_emotion': 'joy'}
-Application test completed without errors
+$ cd /home/project/final_project/EmotionDetection
+$ python3
+>>> from emotion_detection import emotion_detector
+>>> emotion_detector("I am very happy and excited today!")
+{'anger': 0.1, 'disgust': 0.0, 'fear': 0.05, 'joy': 0.8, 'sadness': 0.05, 'dominant_emotion': 'joy'}
